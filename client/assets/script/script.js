@@ -1,9 +1,5 @@
 const baseUrl = "http://localhost:3000"
 
-$('#btn-home').click(function () {
-  hotelPage()
-})
-
 $('#btn-hotels').click(function() {
   hotelPage()
 })
@@ -20,9 +16,13 @@ $('.btn-login').click(function() {
   loginPage()
 })
 
+$('.btn-logout').click(function() {
+  logout()
+})
+
 function checkLogin() {
   if (localStorage.getItem('access_token')) {
-    mainPage()
+    hotelPage()
   } else {
     registerPage()
   }
@@ -51,9 +51,10 @@ function registerPage() {
     event.preventDefault()
     data = {
       email: $('#email').val(),
-      username: $('#username').val(),
+      name: $('#username').val(),
       password: $('#password').val()
     }
+    console.log('data');
     $.ajax({
         method: 'POST',
         url: `${baseUrl}/register`,
