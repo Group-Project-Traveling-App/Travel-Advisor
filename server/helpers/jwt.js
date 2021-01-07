@@ -5,4 +5,11 @@ function generateToken(payload) {
     return jwt.sign(payload, SECRET_KEY)
 }
 
-console.log(generateToken({ name: 'test'}));
+function checkToken(access_token) {
+    return jwt.verify(access_token, SECRET_KEY)
+}
+
+module.exports = {
+    generateToken,
+    checkToken
+}
