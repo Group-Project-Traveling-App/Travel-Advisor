@@ -1,5 +1,6 @@
 const { User } = require("../models")
 const { hashPassword, compare } = require('../helpers/hashPassword')
+const { generateToken } = require('../helpers/jwt')
 
 class UserController {
 
@@ -39,13 +40,13 @@ class UserController {
 
       if (user) {
         const matchPassword = compare(password, user.password)
-
+        
         if (matchPassword) {
           const payload = {
             id: user.id,
             email: user.email
           }
-          const access_token = replaceaja
+          const access_token = generateToken(payload)
           return res.status(200).json({access_token})
         } else {
           res.status(400).json({message: `Invalid email or password`})
@@ -59,7 +60,7 @@ class UserController {
   }
 
   static getUser(req, res) {
-    const {email} = req.body
+    const { email } = req.user
 
     User.findOne({where: {email}})
     .then(data => {
@@ -79,12 +80,23 @@ class UserController {
   }
 
   static updateUser(req, res) {
-    const id = req.params.id
-    
-    const {name} = req.body
-    User.update(name, {where: {id}})
+    const { name } = req.body
+    const { id } = req.params
+    console.log(req.user, name, id);
+    User.update({ name }, {
+      where: { id },
+      returning: true
+    })
     .then(data => {
-      res.status(200).json({name: data.name})
+      if (data[0] === 0) {
+        throw { name: "resourceNotFound"}
+      } else {
+        const output = {
+          name: data[1][0].name,
+          email: data[1][0].email
+        }
+        res.status(200).json(output)
+      }
     })
     .catch(err => {
       if (err) {
