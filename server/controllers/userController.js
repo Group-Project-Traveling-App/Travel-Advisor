@@ -1,4 +1,5 @@
-const {User} = require("../models")
+const { User } = require("../models")
+const { hashPassword, compare } = require('../helpers/hashPassword')
 
 class UserController {
 
@@ -6,12 +7,16 @@ class UserController {
     const newUser = {
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password
+      password: hashPassword(req.body.password)
     }
 
     User.create(newUser)
     .then(user => {
-      res.status(201).json({name: req.body.name, email: req.body.email})
+      let output = {
+        name: user.name,
+        email: user.email
+      }
+      res.status(201).json(output)
     })
     .catch(err => {
       if (err) {
@@ -33,7 +38,7 @@ class UserController {
       const user = await User.findOne({where: {email}})
 
       if (user) {
-        const matchPassword = replaceaja
+        const matchPassword = compare(password, user.password)
 
         if (matchPassword) {
           const payload = {
