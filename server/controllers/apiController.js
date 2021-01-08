@@ -28,31 +28,6 @@ class ApiController{
         })
     }
 
-    static getWeather(req, res, next){
-        const params = {
-        access_key: process.env.WEATHERSTACK_API_KEY,
-        query: req.body.city
-        }
-
-        axios.get('http://api.weatherstack.com/current', {params})
-        .then(response => {
-            const location = response.data.location
-            const weather = response.data.current
-            const result = {
-                city: location.name,
-                region: `${location.region}, ${location.country}`,
-                temperature: weather.temperature,
-                weather_icons: weather.weather_icons,
-                weather_descriptions: weather.weather_descriptions,
-                humidity: weather.humidity,
-                cloudcover: weather.cloudcover
-            };
-            res.status(200).json(result);
-        }).catch(error => {
-            res.status(404).json({ message: "City not found" })
-        });
-    }
-
     static async getHotel(req, res, next){
         try {
             const city = req.body.city
@@ -61,11 +36,11 @@ class ApiController{
             let find = await axios.get(`http://engine.hotellook.com/api/v2/lookup.json?query=${city}&lang=en&lookFor=city&limit=1&token=${api_key}`)
             if (find) {
                 const locationId = find.data.results.locations[0].id
-                // console.log(locationId);
                 let hotelList = await axios.get(`http://yasen.hotellook.com/tp/public/widget_location_dump.json?currency=usd&language=en&limit=${limit}&id=${locationId}&type=luxury&check_in=2021-01-10&check_out=2021-01-15&token=${api_key}`)
                 let hotels = []
                 hotelList.data.luxury.forEach(el => {
                     hotels.push({
+                        id: el.hotel_id,
                         name: el.name,
                         stars: el.stars,
                         rating: el.rating,
@@ -73,12 +48,20 @@ class ApiController{
                         type: el.hotel_type
                     })
                 });
+                let hotelsId = []
+                hotels.forEach(el => {
+                    hotelsId.push(`${el.id}`)
+                })
+                let imagesId = await axios.get(`https://yasen.hotellook.com/photos/hotel_photos?id=${hotelsId}`)
+                for (let i = 0; i < hotelsId.length; i++) {
+                    hotels[i].image = `https://photo.hotellook.com/image_v2/limit/${imagesId.data[hotelsId[i]][0]}/800/520.auto`
+                }
                 res.status(200).json(hotels)
             } else {
                 throw { name: 'Invalid City'}
             }
         } catch (err) {
-            // console.log(err);
+            console.log(err);
             res.status(404).json(err)
         }
 
