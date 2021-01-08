@@ -106,6 +106,32 @@ _Response(200)_
 }
 ```
 
+### Example Response(200)
+
+```json
+{
+    "restaurant": [
+       {
+            "name": "Titik Temu Coffee",
+            "imgUrl": "https://b.zmtcdn.com/data/res_imagery/18251529_RESTAURANT_7bc45fdcfcbb7cc161f38b0aceb318f4.jpg",
+            "url": "https://www.zomato.com/bali/titik-temu-coffee-kerobokan-kelod?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
+            "locality": "Kerobokan Kelod",
+            "city": "Bali",
+            "rating": "4.1",
+            "votes": 367
+        }
+    ],
+    "weather": [
+        {
+            "city": "Bali",
+            "description": "broken clouds",
+            "icon": "04d",
+            "temp": 27
+        }
+    ]
+}
+```
+
 _Response(404)_
 ```json
 {
@@ -134,7 +160,8 @@ _Request Body_
 _Response(200)_
 ```json
 {
-    "hotel": {
+    "hotels": {
+        "id": <hotel id that was gotten by the API>,
         "name": "<restaurant name that was gotten by the API>",
         "imgUrl": "<img of the restaurant that was gotten by the API>",
         "url": "<url that link to that restaurant that was gotten by the API>",
@@ -149,6 +176,36 @@ _Response(200)_
             "description": "<description of the weather in that city>",
             "icon": "<icon that of the weather>",
             "temp": "<temperature of the city>"
+        }
+    ]
+}
+```
+
+### Example Response(200)
+
+```json
+{
+    "hotels": [
+        {
+            "id": 209729,
+            "name": "Hotel Indonesia Kempinski",
+            "stars": 5,
+            "rating": 94,
+            "summary": "Excellent family hotel. Close to Grand Indonesia. Great rooms in excellent location. Awesome vibe.",
+            "type": [
+                "Family Hotel",
+                "Wellness Hotel",
+                "City Hotel"
+            ],
+            "image": "https://photo.hotellook.com/image_v2/limit/8674960586/800/520.auto"
+        }
+    ],
+    "weather": [
+        {
+            "city": "Jakarta",
+            "description": "scattered clouds",
+            "icon": "03d",
+            "temp": 29.74
         }
     ]
 }
