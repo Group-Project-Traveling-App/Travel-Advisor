@@ -79,57 +79,51 @@ class ApiController{
             const limit = req.body.limit
             const api_key = process.env.TRAVELPAYOUT_API_KEY
             let find = await axios.get(`http://engine.hotellook.com/api/v2/lookup.json?query=${city}&lang=en&lookFor=city&limit=1&token=${api_key}`)
-            if (find) {
-                //hotels
-                const locationId = find.data.results.locations[0].id
-                let hotelList = await axios.get(`http://yasen.hotellook.com/tp/public/widget_location_dump.json?currency=usd&language=en&limit=${limit}&id=${locationId}&type=luxury&check_in=2021-01-10&check_out=2021-01-15&token=${api_key}`)
-                let hotels = []
-                hotelList.data.luxury.forEach(el => {
-                    hotels.push({
-                        id: el.hotel_id,
-                        name: el.name,
-                        stars: el.stars,
-                        rating: el.rating,
-                        summary: el.ty_summary,
-                        type: el.hotel_type
-                    })
-                });
-                let hotelsId = []
-                hotels.forEach(el => {
-                    hotelsId.push(`${el.id}`)
+            //hotels
+            const locationId = find.data.results.locations[0].id
+            let hotelList = await axios.get(`http://yasen.hotellook.com/tp/public/widget_location_dump.json?currency=usd&language=en&limit=${limit}&id=${locationId}&type=luxury&check_in=2021-01-10&check_out=2021-01-15&token=${api_key}`)
+            let hotels = []
+            hotelList.data.luxury.forEach(el => {
+                hotels.push({
+                    id: el.hotel_id,
+                    name: el.name,
+                    stars: el.stars,
+                    rating: el.rating,
+                    summary: el.ty_summary,
+                    type: el.hotel_type
                 })
-                let imagesId = await axios.get(`https://yasen.hotellook.com/photos/hotel_photos?id=${hotelsId}`)
-                for (let i = 0; i < hotelsId.length; i++) {
-                    hotels[i].image = `https://photo.hotellook.com/image_v2/limit/${imagesId.data[hotelsId[i]][0]}/800/520.auto`
-                }
-
-                //wether
-                const apiKey = process.env.WEATHER_API_KEY
-                const unit = "metric";
-                const url =`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${unit}`;
-                let result = await axios({
-                    method: 'GET',
-                    url: url,
-                })
-
-                let weather = [{
-                    city: result.data.name,
-                    description: result.data.weather[0].description,
-                    icon: result.data.weather[0].icon,
-                    temp: result.data.main.temp
-                }]
-
-                res.status(200).json({
-                    hotels,
-                    weather
-                })
-            } else {
-                // throw { name: 'Invalid City'}
-
+            });
+            let hotelsId = []
+            hotels.forEach(el => {
+                hotelsId.push(`${el.id}`)
+            })
+            let imagesId = await axios.get(`https://yasen.hotellook.com/photos/hotel_photos?id=${hotelsId}`)
+            for (let i = 0; i < hotelsId.length; i++) {
+                hotels[i].image = `https://photo.hotellook.com/image_v2/limit/${imagesId.data[hotelsId[i]][0]}/800/520.auto`
             }
+
+            //wether
+            const apiKey = process.env.WEATHER_API_KEY
+            const unit = "metric";
+            const url =`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${unit}`;
+            let result = await axios({
+                method: 'GET',
+                url: url,
+            })
+
+            let weather = [{
+                city: result.data.name,
+                description: result.data.weather[0].description,
+                icon: result.data.weather[0].icon,
+                temp: result.data.main.temp
+            }]
+
+            res.status(200).json({
+                hotels,
+                weather
+            })
+            
         } catch (err) {
-            // console.log(err);
-            // res.status(404).json(err)
             next({
                 status: 404,
                 message: "Data not found"
