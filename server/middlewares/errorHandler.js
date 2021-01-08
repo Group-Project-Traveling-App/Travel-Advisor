@@ -7,6 +7,8 @@ function errorHandler(err, req, res, next) {
                     err.errors.forEach(error => {
                         errMsg.push(error.message)
                     });
+                } else {
+                    errMsg.push(err.message)
                 }
                 res.status(400).json({
                     message: errMsg

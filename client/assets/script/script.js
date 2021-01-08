@@ -191,56 +191,135 @@ function restaurantPage() {
   $('#btn-hotels').show()
   $('#btn-restaurants').show()
   $('.btn-logout').show()
+  getRestorant('jakarta')
   $('#restaurants').show()
+
 
   $('#form-restaurant').on('submit', function (e) {
     e.preventDefault()
     let city = $('#search-restaurant').val()
-    $.ajax({
-      method: 'POST',
-      url: `${baseUrl}/restaurants`,
-      data: {
-        city
-      },
-      headers: {
-        access_token: localStorage.getItem('access_token')
-      }
+    getRestorant(city)
+    // $.ajax({
+    //   method: 'POST',
+    //   url: `${baseUrl}/restaurants`,
+    //   data: {
+    //     city
+    //   },
+    //   headers: {
+    //     access_token: localStorage.getItem('access_token')
+    //   }
+    // })
+    // .done(res => {
+    //   // console.log(res);
+    //   // weather
+    //   const city = res.weather.name
+    //   const desc = res.weather.weather[0].description
+    //   const icon = res.weather.weather[0].icon
+    //   const imgIcon = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+    //   $('#restaurant-weather').empty()
+    //   $('#restaurant-weather').append(
+    //     `
+    //       <img src="${imgIcon}" clstyle="width: 2rem;height: 2rem; "alt="">
+    //       <div>
+    //         <span>${city}</span>
+    //         <small>${desc}</small>
+    //       </div>
+    //     `
+    //   )
+
+    //   //restaurant
+    //   $('#restaurants-body').empty()
+    //   res.restaurant.forEach( el => {
+    //     $('#restaurants-body').append(
+    //       `
+    //       <div class="card mb-5 shadow" style="width: 18rem;">
+    //       <img src="${el.restaurant.featured_image}" class="card-img-top" style="height: 12rem;object-fit: cover;" alt="...">
+    //       <div class="card-body">
+    //         <a href="${el.restaurant.url}" style="text-decoration: none;">
+    //           <h5 class="card-title">${el.restaurant.name}</h5>
+    //         </a>
+    //         <small class="mb-1 text-muted">${el.restaurant.location.locality}, ${el.restaurant.location.city}</small>
+    //         <p>Rating: ${el.restaurant.user_rating.aggregate_rating} <small>(${el.restaurant.user_rating.votes})</small></p>            
+    //       </div>
+    //       </div>
+    //       `
+    //     )
+    //   })
+    // })
+    // .fail((xhr, status)=> {
+    //   console.log(xhr, status);
+    //   Swal.fire({
+    //     title: 'Something Error!',
+    //     text: xhr.responseJSON.message,
+    //     icon: 'error',
+    //     confirmButtonText: 'Ok'
+    //   })
+    // })
+    // .always(() => {
+    //   $('#search-restaurant').val('')
+    // })
+  })
+}
+
+function getRestorant(city){
+  $.ajax({
+    method: 'POST',
+    url: `${baseUrl}/restaurants`,
+    data: {
+      city
+    },
+    headers: {
+      access_token: localStorage.getItem('access_token')
+    }
+  })
+  .done(res => {
+    // console.log(res);
+    // weather
+    const city = res.weather.city
+    const desc = res.weather.description
+    const icon = res.weather.icon
+    const imgIcon = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+    $('#restaurant-weather').empty()
+    $('#restaurant-weather').append(
+      `
+        <img src="${imgIcon}" clstyle="width: 2rem;height: 2rem; "alt="">
+        <div>
+          <span>${city}</span>
+          <small>${desc}</small>
+        </div>
+      `
+    )
+
+    //restaurant
+    $('#restaurants-body').empty()
+    res.restaurant.forEach( el => {
+      $('#restaurants-body').append(
+        `
+        <div class="card mb-5 shadow" style="width: 18rem;">
+        <img src="${el.imgUrl}" class="card-img-top" style="height: 12rem;object-fit: cover;" alt="...">
+        <div class="card-body">
+          <a href="${el.url}" style="text-decoration: none;">
+            <h5 class="card-title">${el.name}</h5>
+          </a>
+          <small class="mb-1 text-muted">${el.locality}, ${el.city}</small>
+          <p>Rating: ${el.rating} <small>(${el.votes})</small></p>            
+        </div>
+        </div>
+        `
+      )
     })
-    .done(res => {
-      // console.log(res);
-      res.forEach( restaurant => {
-          console.log(restaurant.restaurant.name);
-      })
-      $('#restaurants-body').empty()
-      res.forEach( el => {
-        $('#restaurants-body').append(
-          `
-          <div class="card mb-5 shadow" style="width: 18rem;">
-          <img src="${el.restaurant.featured_image}" class="card-img-top" style="height: 12rem;object-fit: cover;" alt="...">
-          <div class="card-body">
-            <a href="${el.restaurant.url}" style="text-decoration: none;">
-              <h5 class="card-title">${el.restaurant.name}</h5>
-            </a>
-            <small class="mb-1 text-muted">${el.restaurant.location.locality}, ${el.restaurant.location.city}</small>
-            <p>Rating: ${el.restaurant.user_rating.aggregate_rating} <small>(${el.restaurant.user_rating.votes})</small></p>            
-          </div>
-          </div>
-          `
-        )
-      })
+  })
+  .fail((xhr, status)=> {
+    console.log(xhr, status);
+    Swal.fire({
+      title: 'Something Error!',
+      text: xhr.responseJSON.message,
+      icon: 'error',
+      confirmButtonText: 'Ok'
     })
-    .fail((xhr, status)=> {
-      console.log(xhr, status);
-      Swal.fire({
-        title: 'Something Error!',
-        text: xhr.responseJSON.message,
-        icon: 'error',
-        confirmButtonText: 'Ok'
-      })
-    })
-    .always(() => {
-      $('#search-restaurant').val('')
-    })
+  })
+  .always(() => {
+    $('#search-restaurant').val('')
   })
 }
 
