@@ -74,7 +74,7 @@ function registerPage() {
         })
       })
       .always(() => {
-        $('#form-resgister').trigger('reset')
+        $('#form-register').trigger('reset')
       })
   })
 }
