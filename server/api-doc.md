@@ -9,6 +9,7 @@
 _Request Body_
 ```
 {
+    "name": "<name to post to User>"
     "email": "<email to post to User>",
     "password": "<password to post to User>"
 }
@@ -25,7 +26,12 @@ _Response (201)_
 _Response (400)_
 ```json
 {
-    "message": errMsg
+    "message": [
+        "Name must be filled",
+        "Invalid Email format",
+        "Password must be filled",
+        "Password at least 6 characters"
+    ]
 }
 ```
 
@@ -51,7 +57,11 @@ _Response (200)_
 _Response (400)_
 ```json
 {
-    "message": errMsg
+    "message": [
+        "Invalid Email format",
+        "Password must be filled",
+        "Password at least 6 characters"
+    ]
 }
 ```
 
@@ -76,13 +86,23 @@ _Request Body_
 _Response(200)_
 ```json
 {
-    "name": "<restaurant name that was gotten by the API>",
-    "imgUrl": "<img of the restaurant that was gotten by the API>",
-    "url": "<url that link to that restaurant that was gotten by the API>",
-    "locality": "<locality of the restaurant that was gotten by the API>",
-    "city": "<city location of the restaurant that was gotten by the API>",
-    "rating": "<rating of the restaurant that was gotten by the API>",
-    "votes": <vote that the restaurant get that was gotten by the API>
+    "restaurant": {
+        "name": "<restaurant name that was gotten by the API>",
+        "imgUrl": "<img of the restaurant that was gotten by the API>",
+        "url": "<url that link to that restaurant that was gotten by the API>",
+        "locality": "<locality of the restaurant that was gotten by the API>",
+        "city": "<city location of the restaurant that was gotten by the API>",
+        "rating": "<rating of the restaurant that was gotten by the API>",
+        "votes": <vote that the restaurant get that was gotten by the API>
+    },
+    "weather": [
+        {
+            "city": "<city that was inputed by client>",
+            "description": "<description of the weather in that city>",
+            "icon": "<icon that of the weather>",
+            "temp": "<temperature of the city>"
+        }
+    ]
 }
 ```
 
@@ -107,21 +127,30 @@ _Request Header_
 _Request Body_
 ```json
 {
-    "city": "<city that will be search>",
-    "limit": <how many max item that will be get>
+    "city": "<city that will be search>"
 }
 ```
 
 _Response(200)_
 ```json
 {
-    "name": "<restaurant name that was gotten by the API>",
-    "imgUrl": "<img of the restaurant that was gotten by the API>",
-    "url": "<url that link to that restaurant that was gotten by the API>",
-    "locality": "<locality of the restaurant that was gotten by the API>",
-    "city": "<city location of the restaurant that was gotten by the API>",
-    "rating": "<rating of the restaurant that was gotten by the API>",
-    "votes": <vote that the restaurant get that was gotten by the API>
+    "hotel": {
+        "name": "<restaurant name that was gotten by the API>",
+        "imgUrl": "<img of the restaurant that was gotten by the API>",
+        "url": "<url that link to that restaurant that was gotten by the API>",
+        "locality": "<locality of the restaurant that was gotten by the API>",
+        "city": "<city location of the restaurant that was gotten by the API>",
+        "rating": "<rating of the restaurant that was gotten by the API>",
+        "votes": <vote that the restaurant get that was gotten by the API>
+    },
+    "weather": [
+        {
+            "city": "<city that was inputed by client>",
+            "description": "<description of the weather in that city>",
+            "icon": "<icon that of the weather>",
+            "temp": "<temperature of the city>"
+        }
+    ]
 }
 ```
 
