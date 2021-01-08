@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-signin-client_id"
+    content="59148496653-27671l9rar9mlekgsmmr9gdp9qbl2f51.apps.googleusercontent.com">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link rel="stylesheet" href="/assets/css/style.css" type="text/css">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light shadow px-5">
+    <div class="container-fluid">
+      <a class="navbar-brand" type="button" id="btn-home">Travel Advisor</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" type="button" id="btn-hotels">Hotels</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" type="button" id="btn-restaurants">Restaurants</a>
+          </li>
+        </ul>
+        <div>
+          <button class="btn btn-outline-dark btn-register" type="button">Register</button>
+          <button class="btn btn-outline-dark btn-login" type="button">Login</button>
+          <button class="btn btn-outline-dark btn-logout" type="button">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Home -->
+  <div id="home">
+    <div class="container-fluid d-flex justify-content-between w-75 mx-auto mt-5">
+      <div class="d-flex justify-content-center w-100">
+        <img
+          src="https://images.unsplash.com/photo-1502301197179-65228ab57f78?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=332&q=80"
+          alt="">
+      </div>
+      <div class="w-75">
+        <div class="shadow rounded">
+          <!-- Register -->
+          <div id="register" class="p-5">
+            <div class="mb-3 text-center">
+              <h4>Register</h4>
+              <p>Already have an account, please <a class="btn-login" type="button">sign in</a></p>
+            </div>
+            <form class="w-100 mb-3" id="form-register">
+              <div class="mb-3">
+                <label for="username" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="username">
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email">
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password">
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Register</button>
+            </form>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+          </div>
+          <!-- Login -->
+          <div id="login" class="p-5">
+            <div class="mb-3 text-center">
+              <h4>Login</h4>
+              <p>Dont have an account, please <a class="btn-register" type="button">register first</a></p>
+            </div>
+            <form class="w-100 mb-3" id="form-login">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email-login">
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password-login">
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hotel Page -->
+  <div id="hotels" class="mt-5">
+    <div class="d-flex justify-content-between w-75 mx-auto p-3 mb-5 rounded shadow" style="height: 6rem;">
+      <div>
+        <form class="d-flex" id="form-hotel">
+          <input class="form-control me-2" id="search-hotel" type="search" placeholder="City Destination"
+            aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+      <div id="hotel-weather" class="d-flex justify-content-between">
+        <!-- Buat weather -->
+      </div>
+    </div>
+    <div id="hotels-body" class="d-flex justify-content-between w-75 mx-auto flex-wrap">
+      <!-- Buat Hotels -->
+    </div>
+  </div>
+
+  <!-- Restaurant Page -->
+  <div id="restaurants" class="mt-5">
+    <div class="d-flex justify-content-between w-75 mx-auto p-3 mb-5 rounded shadow" style="height: 6rem;">
+      <div>
+        <form class="d-flex" id="form-restaurant">
+          <input class="form-control me-2" id="search-restaurant" type="search" placeholder="City Destination"
+            aria-label="Search">
+          <button class="btn btn-outline-success flex-wrap" type="submit">Search</button>
+        </form>
+      </div>
+      <div id="restaurant-weather" class="d-flex justify-content-between">
+          <!-- Image cuaca -->
+      </div>
+    </div>
+    <div id="restaurants-body" class="d-flex justify-content-between w-75 mx-auto flex-wrap">
+      <!-- Buat Restaurant -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
+    </script>
+    <script src="./assets/script/script.js"></script>
+</body>
+
+</html>
