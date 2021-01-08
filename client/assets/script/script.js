@@ -204,8 +204,8 @@ function getRestaurants(city){
         <img src="${imgIcon}" clstyle="width: 2rem;height: 2rem; "alt="">
         <div>
           <small class="fw-bolder">${city}</small><br>
-          <small>${desc}</small><br>
-          <small class="fs-6">${temp}</small>
+          <small class="text-muted">${desc}</small><br>
+          <small class="">${temp} &deg C</small>
         </div>
       `
     )
@@ -269,8 +269,8 @@ function getHotels(city){
         <img src="${imgIcon}" clstyle="width: 2rem;height: 2rem; "alt="">
         <div>
           <small class="fw-bolder">${city}</small><br>
-          <small>${desc}</small><br>
-          <small class="fs-6">${temp}</small>
+          <small class="text-muted">${desc}</small><br>
+          <small class="">${temp} &deg C</small>
         </div>
       `
     )
@@ -295,13 +295,7 @@ function getHotels(city){
     })
   })
   .fail( (xhr, status) => {
-    console.log(xhr, status);
-    // Swal.fire({
-    //   title: 'Something Error!',
-    //   text: xhr.responseJSON.message,
-    //   icon: 'error',
-    //   confirmButtonText: 'Ok'
-    // })
+    console.log(xhr);
   })
   .always(() => {
     $('#search-hotel').val('')
