@@ -155,34 +155,13 @@ function hotelPage() {
   $('#btn-hotels').show()
   $('#btn-restaurants').show()
   $('.btn-logout').show()
+  getHotels('jakarta')
   $('#hotels').show()
 
   $('#form-hotel').on('submit', function (e) {
     e.preventDefault()
     let city = $('#search-hotel').val()
-    $.ajax({
-      method: 'POST',
-      url: `${baseUrl}/hotels`,
-      data: city,
-      headers: {
-        access_token: localStorage.getItem('access_token')
-      }
-    })
-    .done(res => {
-      // HTML
-    })
-    .fail(err => {
-      console.log(err);
-      Swal.fire({
-        title: 'Something Error!',
-        text: xhr.responseJSON.message,
-        icon: 'error',
-        confirmButtonText: 'Ok'
-      })
-    })
-    .always(() => {
-      $('#search-hotel').val('')
-    })
+    getHotels(city)
   })
 }
 
@@ -191,56 +170,141 @@ function restaurantPage() {
   $('#btn-hotels').show()
   $('#btn-restaurants').show()
   $('.btn-logout').show()
+  getRestaurants('jakarta')
   $('#restaurants').show()
 
   $('#form-restaurant').on('submit', function (e) {
     e.preventDefault()
     let city = $('#search-restaurant').val()
-    $.ajax({
-      method: 'POST',
-      url: `${baseUrl}/restaurants`,
-      data: {
-        city
-      },
-      headers: {
-        access_token: localStorage.getItem('access_token')
-      }
+    getRestaurants(city)
+  })
+}
+
+function getRestaurants(city){
+  $.ajax({
+    method: 'POST',
+    url: `${baseUrl}/restaurants`,
+    data: {
+      city
+    },
+    headers: {
+      access_token: localStorage.getItem('access_token')
+    }
+  })
+  .done(res => {
+    console.log(res);
+    const city = res.weather[0].city
+    const desc = res.weather[0].description
+    const icon = res.weather[0].icon
+    const temp = res.weather[0].temp
+    const imgIcon = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+    $('#restaurant-weather').empty()
+    $('#restaurant-weather').append(
+      `
+        <img src="${imgIcon}" clstyle="width: 2rem;height: 2rem; "alt="">
+        <div>
+          <small class="fw-bolder">${city}</small><br>
+          <small>${desc}</small><br>
+          <small class="fs-6">${temp}</small>
+        </div>
+      `
+    )
+
+    //restaurant
+    $('#restaurants-body').empty()
+    res.restaurant.forEach( el => {
+      $('#restaurants-body').append(
+        `
+        <div class="card mb-5 shadow" style="width: 18rem;">
+        <img src="${el.imgUrl}" class="card-img-top" style="height: 12rem;object-fit: cover;" alt="...">
+        <div class="card-body">
+          <a href="${el.url}" style="text-decoration: none;">
+            <h5 class="card-title">${el.name}</h5>
+          </a>
+          <small class="mb-1 text-muted">${el.locality}, ${el.city}</small>
+          <p>Rating: ${el.rating} <small class="text-muted">(${el.votes})</small></p>            
+        </div>
+        </div>
+        `
+      )
     })
-    .done(res => {
-      // console.log(res);
-      res.forEach( restaurant => {
-          console.log(restaurant.restaurant.name);
-      })
-      $('#restaurants-body').empty()
-      res.forEach( el => {
-        $('#restaurants-body').append(
-          `
-          <div class="card mb-5 shadow" style="width: 18rem;">
-          <img src="${el.restaurant.featured_image}" class="card-img-top" style="height: 12rem;object-fit: cover;" alt="...">
-          <div class="card-body">
-            <a href="${el.restaurant.url}" style="text-decoration: none;">
-              <h5 class="card-title">${el.restaurant.name}</h5>
-            </a>
-            <small class="mb-1 text-muted">${el.restaurant.location.locality}, ${el.restaurant.location.city}</small>
-            <p>Rating: ${el.restaurant.user_rating.aggregate_rating} <small>(${el.restaurant.user_rating.votes})</small></p>            
-          </div>
-          </div>
-          `
-        )
-      })
+  })
+  .fail((xhr, status)=> {
+    console.log(xhr, status);
+    Swal.fire({
+      title: 'Something Error!',
+      text: xhr.responseJSON.message,
+      icon: 'error',
+      confirmButtonText: 'Ok'
     })
-    .fail((xhr, status)=> {
-      console.log(xhr, status);
-      Swal.fire({
-        title: 'Something Error!',
-        text: xhr.responseJSON.message,
-        icon: 'error',
-        confirmButtonText: 'Ok'
-      })
+  })
+  .always(() => {
+    $('#search-restaurant').val('')
+  })
+}
+
+function getHotels(city){
+  let limit = 9
+  $.ajax({
+    method: 'POST',
+    url: `${baseUrl}/hotels`,
+    data: {
+      city,
+      limit
+    },
+    headers: {
+      access_token: localStorage.getItem('access_token')
+    }
+  })
+  .done( res => {
+    //weather
+    const city = res.weather[0].city
+    const desc = res.weather[0].description
+    const icon = res.weather[0].icon
+    const temp = res.weather[0].temp
+    const imgIcon = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+    $('#hotel-weather').empty()
+    $('#hotel-weather').append(
+      `
+        <img src="${imgIcon}" clstyle="width: 2rem;height: 2rem; "alt="">
+        <div>
+          <small class="fw-bolder">${city}</small><br>
+          <small>${desc}</small><br>
+          <small class="fs-6">${temp}</small>
+        </div>
+      `
+    )
+    //hotels
+    $('#hotels-body').empty()
+    res.hotels.forEach( el => {
+      $('#hotels-body').append(
+        `
+        <div class="card mb-5 shadow" style="width: 18rem;">
+        <img src="${el.image}" class="card-img-top" style="height: 12rem;object-fit: cover;" alt="...">
+        <div class="card-body">
+          <a href="#" style="text-decoration: none;">
+            <h5 class="card-title">${el.name}</h5>
+          </a>
+          <small class="mb-1 text-muted text-capitalize">${city}</small>
+          <p>Rating: ${el.rating}</p>   
+          <p class="card-text">${el.summary}</p>        
+        </div>
+        </div>
+        `
+      )
     })
-    .always(() => {
-      $('#search-restaurant').val('')
-    })
+  })
+  .fail( (xhr, status) => {
+    console.log(xhr, status);
+    // Swal.fire({
+    //   title: 'Something Error!',
+    //   text: xhr.responseJSON.message,
+    //   icon: 'error',
+    //   confirmButtonText: 'Ok'
+    // })
+  })
+  .always(() => {
+    $('#search-hotel').val('')
   })
 }
 

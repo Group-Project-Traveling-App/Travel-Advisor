@@ -14,7 +14,7 @@
 
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light w-75 mx-auto">
+  <nav class="navbar navbar-expand-lg navbar-light shadow">
     <div class="container-fluid">
       <a class="navbar-brand" type="button" id="btn-home">Travel Advisor</a>
       <div class="collapse navbar-collapse">
@@ -94,7 +94,7 @@
 
   <!-- Hotel Page -->
   <div id="hotels" class="mt-5">
-    <div class="d-flex justify-content-between w-75 mx-auto p-3 mb-5 bg-light rounded shadow">
+    <div class="d-flex justify-content-between w-75 mx-auto p-3 mb-5 rounded shadow">
       <div>
         <form class="d-flex" id="form-hotel">
           <input class="form-control me-2" id="search-hotel" type="search" placeholder="City Destination"
@@ -102,78 +102,18 @@
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
       </div>
-      <div>
-        Buat weather
+      <div id="hotel-weather" class="d-flex justify-content-between">
+        <!-- Buat weather -->
       </div>
     </div>
-    <div class="d-flex justify-content-between w-75 mx-auto flex-wrap">
-      <div class="card mb-5 shadow" style="width: 18rem;">
-        <img style="height: 18rem;"
-          src="https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?s=1024x768"
-          class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5>Nama Hotel</h5>
-          <small class="mb-1 text-muted">Jakarta</small>
-          <p class="card-text">Some quick example text to build on the Nama Hotel and make up the bulk of the card's
-            content.</p>
-        </div>
-      </div>
-      <div class="card mb-5 shadow" style="width: 18rem;">
-        <img src="https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?s=1024x768"
-          class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Nama Hotel</h5>
-          <small class="mb-1 text-muted">Jakarta</small>
-          <p class="card-text">Some quick example text to build on the Nama Hotel and make up the bulk of the card's
-            content.</p>
-        </div>
-      </div>
-      <div class="card mb-5 shadow" style="width: 18rem;">
-        <img src="https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?s=1024x768"
-          class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Nama Hotel</h5>
-          <small class="mb-1 text-muted">Jakarta</small>
-          <p class="card-text">Some quick example text to build on the Nama Hotel and make up the bulk of the card's
-            content.</p>
-        </div>
-      </div>
-      <div class="card mb-5 shadow" style="width: 18rem;">
-        <img src="https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?s=1024x768"
-          class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Nama Hotel</h5>
-          <small class="mb-1 text-muted">Jakarta</small>
-          <p class="card-text">Some quick example text to build on the Nama Hotel and make up the bulk of the card's
-            content.</p>
-        </div>
-      </div>
-      <div class="card mb-5 shadow" style="width: 18rem;">
-        <img src="https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?s=1024x768"
-          class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Nama Hotel</h5>
-          <small class="mb-1 text-muted">Jakarta</small>
-          <p class="card-text">Some quick example text to build on the Nama Hotel and make up the bulk of the card's
-            content.</p>
-        </div>
-      </div>
-      <div class="card mb-5 shadow" style="width: 18rem;">
-        <img src="https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?s=1024x768"
-          class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Nama Hotel</h5>
-          <small class="mb-1 text-muted">Jakarta</small>
-          <p class="card-text">Some quick example text to build on the Nama Hotel and make up the bulk of the card's
-            content.</p>
-        </div>
-      </div>
+    <div id="hotels-body" class="d-flex justify-content-between w-75 mx-auto flex-wrap">
+      <!-- Buat Hotels -->
     </div>
   </div>
 
   <!-- Restaurant Page -->
   <div id="restaurants" class="mt-5">
-    <div class="d-flex justify-content-between w-75 mx-auto p-3 mb-5 bg-light rounded shadow">
+    <div class="d-flex justify-content-between w-75 mx-auto p-3 mb-5 rounded shadow">
       <div>
         <form class="d-flex" id="form-restaurant">
           <input class="form-control me-2" id="search-restaurant" type="search" placeholder="City Destination"
@@ -181,8 +121,8 @@
           <button class="btn btn-outline-success flex-wrap" type="submit">Search</button>
         </form>
       </div>
-      <div>
-        Buat weather
+      <div id="restaurant-weather" class="d-flex justify-content-between">
+          <!-- Image cuaca -->
       </div>
     </div>
     <div id="restaurants-body" class="d-flex justify-content-between w-75 mx-auto flex-wrap">
