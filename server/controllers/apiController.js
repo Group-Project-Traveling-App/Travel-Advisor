@@ -61,7 +61,6 @@ class ApiController{
                 throw { name: 'Invalid City'}
             }
         } catch (err) {
-            res.status(404).json(err)
         }
 
     }
