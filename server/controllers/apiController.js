@@ -24,8 +24,7 @@ class ApiController{
             res.status(200).json(response.data.restaurants)
         })
         .catch(err => {
-            console.log(err);
-            // next(err)
+            next(err)
         })
     }
 }

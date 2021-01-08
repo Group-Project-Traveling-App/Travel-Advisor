@@ -66,9 +66,15 @@ function registerPage() {
       })
       .fail((xhr, status) => {
         console.log(xhr, status);
+        Swal.fire({
+          title: 'Something Error!',
+          text: xhr.responseJSON.message[0],
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
       })
       .always(() => {
-        $('#password').val('')
+        $('#form-resgister').trigger('reset')
       })
   })
 }
@@ -95,11 +101,17 @@ function loginPage() {
         localStorage.setItem('access_token', res.access_token)
         checkLogin()
       })
-      .fail(err => {
-        console.log(err, 'err login');
+      .fail((xhr) => {
+        console.log(xhr);
+        Swal.fire({
+          title: 'Something Error!',
+          text: xhr.responseJSON.message,
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
       })
       .always(() => {
-        $('#password-login').val('')
+        $('#form-login').trigger('reset')
       })
   })
 }
@@ -118,8 +130,14 @@ function onSignIn(googleUser) {
       localStorage.setItem('access_token', res.access_token)
       checkLogin()
     })
-    .fail(err => {
-      console.log(err);
+    .fail((xhr, status)=> {
+      console.log(xhr, status);
+      Swal.fire({
+        title: 'Something Error!',
+        text: xhr.responseJSON.message,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
     })
 }
 
@@ -155,6 +173,15 @@ function hotelPage() {
     })
     .fail(err => {
       console.log(err);
+      Swal.fire({
+        title: 'Something Error!',
+        text: xhr.responseJSON.message,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+    })
+    .always(() => {
+      $('#search-hotel').val('')
     })
   })
 }
@@ -202,8 +229,17 @@ function restaurantPage() {
         )
       })
     })
-    .fail(err => {
-      console.log(err);
+    .fail((xhr, status)=> {
+      console.log(xhr, status);
+      Swal.fire({
+        title: 'Something Error!',
+        text: xhr.responseJSON.message,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+    })
+    .always(() => {
+      $('#search-restaurant').val('')
     })
   })
 }

@@ -1,14 +1,15 @@
 const { User } = require("../models")
 const { hashPassword, compare } = require('../helpers/hashPassword')
 const { generateToken } = require('../helpers/jwt')
+const { OAuth2Client } = require('google-auth-library');
 
 class UserController {
 
-  static register(req, res) {
+  static register(req, res, next) {
     const newUser = {
       name: req.body.name,
       email: req.body.email,
-      password: hashPassword(req.body.password)
+      password: req.body.password
     }
 
     User.create(newUser)
@@ -25,14 +26,19 @@ class UserController {
         err.errors.map(e => {
           errors.push(e.message)
         })
-        res.status(400).json(errors)
+        // res.status(400).json(errors)
+        next({
+          status: 400,
+          errors: err.errors
+        })
       } else {
-        res.status(500).json({message: `Internal Server Error`})
+        next(err)
+        // res.status(500).json({message: `Internal Server Error`})
       }
     })
   }
 
-  static async login(req, res) {
+  static async login(req, res, next) {
     try {
       const {email, password} = req.body
 
@@ -49,13 +55,24 @@ class UserController {
           const access_token = generateToken(payload)
           return res.status(200).json({access_token})
         } else {
-          res.status(400).json({message: `Invalid email or password`})
+          // res.status(400).json({message: `Invalid email or password`})
+          next({
+            status: 400,
+            errors: [
+                { message: "Invalid email or password" }
+            ]
+        })
         }
       } else {
-        res.status(400).json({message: `Invalid email or password`})
+        // res.status(400).json({message: `Invalid email or password`})
+        next({
+          status: 401,
+          message: "Email not found, please register first"
+      })
       }
     } catch (err) {
-      res.status(500).json({message: `Internal Server Error`})
+      // res.status(500).json({message: `Internal Server Error`})
+      next(err)
     }
   }
 
@@ -106,6 +123,50 @@ class UserController {
       }
     })
   }
+
+  static handleGoogleLogin(req, res, next){
+    const { id_token } = req.body
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    let email
+    let name
+
+    client.verifyIdToken({
+      idToken: id_token,
+      audience: process.env.GOOGLE_CLIENT_ID
+    })
+    .then(ticket => {
+      const payload = ticket.getPayload()
+      email = payload.email
+      name = payload.name
+      return User.findOne({
+          where: {
+              email
+          }
+      })
+    })
+    .then(data => {
+      if(!data){
+          return User.create({
+              email,
+              name,
+              password: Math.random()*1000+'traveladvisor'
+          })
+      } else {
+          return data
+      }
+    })
+    .then(data => {
+      let access_token = generateToken({
+          id: data.id,
+          email: data.email
+      })
+      res.status(200).json({access_token})
+    })
+    .catch(err => {
+      // res.status(500).json({message: `Internal Server Error`})
+      next(err)
+    })
+}
 
 }
 

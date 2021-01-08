@@ -13,10 +13,11 @@ async function authentication(req, res, next) {
             }
             next()
         } else {
-            throw { name: "invalidAccessToken"}
+            // throw { name: "invalidAccessToken"}
+            next({status: 401})
         }
     } catch (err) {
-        res.status(500).json(err)
+        next(err)
     }
 }
 
