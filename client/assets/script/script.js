@@ -66,9 +66,15 @@ function registerPage() {
       })
       .fail((xhr, status) => {
         console.log(xhr, status);
+        Swal.fire({
+          title: 'Something Error!',
+          text: xhr.responseJSON.message[0],
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
       })
       .always(() => {
-        $('#password').val('')
+        $('#form-resgister').trigger('reset')
       })
   })
 }
@@ -95,11 +101,17 @@ function loginPage() {
         localStorage.setItem('access_token', res.access_token)
         checkLogin()
       })
-      .fail(err => {
-        console.log(err, 'err login');
+      .fail((xhr) => {
+        console.log(xhr);
+        Swal.fire({
+          title: 'Something Error!',
+          text: xhr.responseJSON.message,
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
       })
       .always(() => {
-        $('#password-login').val('')
+        $('#form-login').trigger('reset')
       })
   })
 }
@@ -118,8 +130,14 @@ function onSignIn(googleUser) {
       localStorage.setItem('access_token', res.access_token)
       checkLogin()
     })
-    .fail(err => {
-      console.log(err);
+    .fail((xhr, status)=> {
+      console.log(xhr, status);
+      Swal.fire({
+        title: 'Something Error!',
+        text: xhr.responseJSON.message,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
     })
 }
 
@@ -155,6 +173,15 @@ function hotelPage() {
     })
     .fail(err => {
       console.log(err);
+      Swal.fire({
+        title: 'Something Error!',
+        text: xhr.responseJSON.message,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+    })
+    .always(() => {
+      $('#search-hotel').val('')
     })
   })
 }
@@ -171,17 +198,48 @@ function restaurantPage() {
     let city = $('#search-restaurant').val()
     $.ajax({
       method: 'POST',
-      url: `${baseUrl}/hotels`,
-      data: city,
+      url: `${baseUrl}/restaurants`,
+      data: {
+        city
+      },
       headers: {
         access_token: localStorage.getItem('access_token')
       }
     })
     .done(res => {
-      // HTML
+      // console.log(res);
+      res.forEach( restaurant => {
+          console.log(restaurant.restaurant.name);
+      })
+      $('#restaurants-body').empty()
+      res.forEach( el => {
+        $('#restaurants-body').append(
+          `
+          <div class="card mb-5 shadow" style="width: 18rem;">
+          <img src="${el.restaurant.featured_image}" class="card-img-top" style="height: 12rem;object-fit: cover;" alt="...">
+          <div class="card-body">
+            <a href="${el.restaurant.url}" style="text-decoration: none;">
+              <h5 class="card-title">${el.restaurant.name}</h5>
+            </a>
+            <small class="mb-1 text-muted">${el.restaurant.location.locality}, ${el.restaurant.location.city}</small>
+            <p>Rating: ${el.restaurant.user_rating.aggregate_rating} <small>(${el.restaurant.user_rating.votes})</small></p>            
+          </div>
+          </div>
+          `
+        )
+      })
     })
-    .fail(err => {
-      console.log(err);
+    .fail((xhr, status)=> {
+      console.log(xhr, status);
+      Swal.fire({
+        title: 'Something Error!',
+        text: xhr.responseJSON.message,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+    })
+    .always(() => {
+      $('#search-restaurant').val('')
     })
   })
 }

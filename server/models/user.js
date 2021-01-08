@@ -1,4 +1,5 @@
 'use strict';
+const { hashPassword } = require('../helpers/hashPassword')
 const {
   Model
 } = require('sequelize');
@@ -18,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         notEmpty: {
-          msg: `Must be filled`
+          msg: `Name must be filled`
         }
       }
     },
@@ -26,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         notEmpty: {
-          msg: `Must be filled`
+          msg: `Email must be filled`
         },
         isEmail: {
           msg: `Invalid Email format`
@@ -38,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         notEmpty: {
-          msg: `Must be filled`
+          msg: `Password must be filled`
         },
         len: {
           args: [6],
@@ -47,6 +48,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }, {
+    hooks: {
+      beforeCreate: (instance, options) => {
+        instance.password = hashPassword(instance.password)
+      }
+    },
     sequelize,
     modelName: 'User',
   });
