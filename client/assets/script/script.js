@@ -74,7 +74,7 @@ function registerPage() {
         })
       })
       .always(() => {
-        $('#form-resgister').trigger('reset')
+        $('#form-register').trigger('reset')
       })
   })
 }
@@ -147,7 +147,7 @@ function logout() {
   auth2.signOut().then(function () {
     console.log('User signed out.')
   });
-  registerPage()
+  loginPage()
 }
 
 function hotelPage() {
